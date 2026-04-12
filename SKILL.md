@@ -246,12 +246,30 @@ ls -d 03_GATESIM 2>/dev/null
 
 #### D-2：產生 `$GATESIM_DIR/03_run`
 
+先用 AskUserQuestion 詢問（單選）：
+> Testbench 是否有使用 `$sdf_annotate` 直接導入 SDF？
+- `是，TB 內有 $sdf_annotate`
+- `否，由外部 -sdf 參數指定`
+
+**情況一：TB 有 `$sdf_annotate`**
+
+用 Grep 搜尋 `TB_FILES` 中的 `` `ifdef `` 或 `$sdf_annotate` 附近內容，找出控制 SDF annotation 的 define 名稱（例如 `GATE_SIM`、`SDF_SIM` 等）。
+
+產生 `03_run`：
+```
+vcs -full64 -debug_access+all -R +v2k -f file.f +neg_tchk +define+<DEFINE_NAME>
+```
+- `<DEFINE_NAME>` 替換成從 TB 找到的實際 define 名稱
+- 不需要 `cp` SDF，不需要 `-sdf` 參數
+
+**情況二：TB 無 `$sdf_annotate`**
+
+產生 `03_run`：
 ```
 cp ../$SYN_DIR/Netlist/$SDF_FILE .
 vcs -full64 -debug_access+all -R +v2k -f file.f +neg_tchk +sdfverbose -sdf max:$TOP:$SDF_FILE
 ```
-
-- `SYN_DIR` 為空（Phase C 已跳過）→ `cp` 那行略過，並在 `-sdf` 路徑中以 `02_SYN` 作為預設值並加上注釋提示使用者確認路徑
+- `SYN_DIR` 為空（Phase C 已跳過）→ `cp` 那行略過，並在 `-sdf` 路徑中以 `02_SYN` 作為預設值並加注釋提示使用者確認路徑
 
 依 `OVERWRITE_MODE` 決定是否覆蓋。
 
