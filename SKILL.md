@@ -166,7 +166,6 @@ ls -d 02_SYN 2>/dev/null
   用 Read 讀取以下檔案，再用 Write 寫入 `$SYN_DIR/`：
   - `~/.claude/skills/gen-flow/resource/dc/syn16.tcl` → `$SYN_DIR/syn16.tcl`
   - `~/.claude/skills/gen-flow/resource/dc/syn90.tcl` → `$SYN_DIR/syn90.tcl`
-  - `~/.claude/skills/gen-flow/resource/dc/syn.sdc`   → `$SYN_DIR/syn.sdc`
 
   複製完成後記錄 `TCL_FILE=$SYN_DIR/$TCL_NAME`。
 

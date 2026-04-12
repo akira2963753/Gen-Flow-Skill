@@ -38,9 +38,8 @@ project/
 | `01_RTL/file.f` | RTL filelist（含 package、design、testbench） |
 | `02_SYN/02_run` | Design Compiler 執行腳本 |
 | `02_SYN/file.f` | Synthesis filelist（僅 RTL，不含 testbench） |
-| `02_SYN/syn16.tcl` | TSMC 16nm synthesis TCL 範本 |
-| `02_SYN/syn90.tcl` | TSMC 90nm synthesis TCL 範本 |
-| `02_SYN/syn.sdc` | Synthesis 時序約束檔 |
+| `02_SYN/syn16.tcl` | TSMC 16nm synthesis TCL 範本（含時序約束） |
+| `02_SYN/syn90.tcl` | TSMC 90nm synthesis TCL 範本（含時序約束） |
 | `03_GATESIM/03_run` | VCS gate-sim 執行腳本（含 SDF back-annotation） |
 | `03_GATESIM/file.f` | Gate-sim filelist（含 netlist、testbench、cell lib） |
 

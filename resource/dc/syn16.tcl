@@ -50,7 +50,7 @@ sh mkdir -p Report
 ############################################
 # import design
 ############################################
-set DESIGN "Digital_Filter"
+set DESIGN "Interpolator"
 
 analyze -f sverilog -vcs "-f file.f"
 elaborate $DESIGN
@@ -58,9 +58,35 @@ link
 current_design $DESIGN
 
 ############################################
-# source sdc
+# set Clock
 ############################################
-source -echo -verbose ./syn.sdc
+set cycle 1.0
+
+create_clock -period $cycle -name clk   [get_ports clk]
+set_dont_touch_network                  [get_clocks clk]
+set_fix_hold                            [get_clocks clk]
+set_ideal_network                       [get_ports clk]
+set_clock_uncertainty -hold 0.005       [get_clocks clk]
+set_clock_uncertainty -setup 0.1        [get_clocks clk]
+set_clock_latency 0.5                   [get_clocks clk]
+
+############################################
+# set max delay from input to output
+############################################
+set MAX_Delay 0
+set_max_delay $MAX_Delay -from [all_inputs] -to [all_outputs]
+
+############################################
+# input drive and output load
+############################################
+set_drive 1 [all_inputs]
+set_load 0.05 [all_outputs]
+
+############################################
+# set i/o delay
+############################################
+set_input_delay  [expr $cycle * 0.5] -clock clk [remove_from_collection [all_inputs] {clk}]
+set_output_delay [expr $cycle * 0.5] -clock clk [all_outputs]
 
 check_design > Report/check_design.txt
 check_timing > Report/check_timing.txt
@@ -98,9 +124,9 @@ change_names -hierarchy -rules name_rule
 
 remove_unconnected_ports -blast buses [get_cells -hierarchical *]
 set verilogout_higher_designs_first true
-write -format ddc      -hierarchy -output "./Netlist/${DESIGN}_syn.ddc"
+write -format ddc      -hierarchy -output "./Netlist/${DESIGN}.ddc"
 write -format verilog  -hierarchy -output "./Netlist/${DESIGN}_syn.v"
-write_sdf -version 3.0 -context verilog ./Netlist/${DESIGN}_syn.sdf
+write_sdf -version 3.0 -context verilog ./Netlist/${DESIGN}.sdf
 write_sdc ./Netlist/${DESIGN}_syn.sdc -version 1.8
 sh sed -i {6i \`timescale 1ns/1ps} ./Netlist/${DESIGN}_syn.v
 
