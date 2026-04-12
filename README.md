@@ -2,6 +2,14 @@
 
 自動掃描 ASIC 專案目錄，產生各階段所需的 run scripts 與 `file.f`，省去每次手動撰寫的重複工作。
 
+## 安裝
+
+```bash
+git clone https://github.com/akira2963753/Gen-Flow-Skill.git ~/.claude/skills/gen-flow
+```
+
+安裝完成後即可直接使用，不需要其他設定。
+
 ## 使用方式
 
 在專案根目錄下呼叫：
