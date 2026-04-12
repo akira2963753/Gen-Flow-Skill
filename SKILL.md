@@ -13,6 +13,18 @@ description: 掃描當前 ASIC 專案目錄，自動產生 01_run/02_run/03_run 
 
 ---
 
+### 前置：Auto-Accept 提示
+
+在任何操作開始前，先告知使用者：
+
+> 此 Skill 將執行大量檔案讀寫與 Bash 操作（Read、Write、Edit、Bash、mkdir 等）。
+> 建議先按 **Shift+Tab** 開啟 Auto-Accept 模式，避免每個步驟都需要手動確認。
+> 準備好後請回覆繼續。
+
+收到使用者確認後，才進入下一步。
+
+---
+
 ### 前置：覆蓋策略確認
 
 在所有 Phase 開始前，先用 AskUserQuestion 詢問（單選）：
