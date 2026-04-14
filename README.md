@@ -54,23 +54,31 @@ project/
 
 ## 執行流程
 
-```
-前置：詢問覆蓋策略（全部覆蓋 / 逐一詢問 / 全部跳過）
-  │
-  ▼
-Phase A：00_TESTBED → 確認目錄 → 掃描 testbench 檔案
-  │
-  ▼
-Phase B：01_RTL → 確認目錄 → 偵測 package / Top Design → 產生 01_run + file.f
-  │
-  ▼
-Phase C：02_SYN → 確認目錄 → 選擇製程 / 偵測 TCL → 更新設計名稱 → 產生 02_run + file.f
-  │
-  ▼
-Phase D：03_GATESIM → 確認目錄 → 產生 03_run + file.f
-```
+採用「先掃描、再問完、後執行」三段式架構，所有問題集中在一輪確認，問完後全自動執行。
 
-每個 Phase 獨立完成後才進入下一個，中途若有問題會暫停詢問使用者。
+```
+Phase 0：掃描所有目錄與檔案（純讀，不寫入）
+  │
+  ▼
+Phase 1：依掃描結果，一次問完所有問題
+  │  ├─ Q0：覆蓋策略（全部覆蓋 / 逐一詢問 / 全部跳過）
+  │  ├─ Q1：00_TESTBED 目錄（不存在時）
+  │  ├─ Q2：TB 檔案選擇（多個時）
+  │  ├─ Q3：01_RTL 目錄（不存在時）
+  │  ├─ Q4：Top Design 選擇（多個 RTL 時）
+  │  ├─ Q5：02_SYN 目錄（不存在時）
+  │  ├─ Q6：製程 / TCL 選擇
+  │  ├─ Q7：03_GATESIM 目錄（不存在時）
+  │  ├─ Q8：SDF Annotation 方式
+  │  └─ Q9：Cell Library（SYN 被跳過時）
+  │
+  ▼
+Phase 2：執行所有寫入（不再詢問）
+  ├─ A：建立 TESTBED 目錄
+  ├─ B：01_RTL → 產生 01_run + file.f
+  ├─ C：02_SYN → 複製 TCL 範本、更新設計名稱、產生 02_run + file.f
+  └─ D：03_GATESIM → 產生 03_run + file.f
+```
 
 ## 注意事項
 
